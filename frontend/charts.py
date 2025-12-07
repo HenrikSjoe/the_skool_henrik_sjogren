@@ -496,10 +496,25 @@ def create_comparison_chart(omrade):
     data_stud['år'] = data_stud['år'].astype(int)
     data_exam['år'] = data_exam['år'].astype(int)
 
+    data_stud = data_stud[data_stud['Studerande och examinerade inom yrkeshögskolan'] != '..']
+    data_stud['Studerande och examinerade inom yrkeshögskolan'] = pd.to_numeric(
+        data_stud['Studerande och examinerade inom yrkeshögskolan']
+    )
+
     data_exam = data_exam[data_exam['Studerande och examinerade inom yrkeshögskolan'] != '..']
     data_exam['Studerande och examinerade inom yrkeshögskolan'] = pd.to_numeric(
         data_exam['Studerande och examinerade inom yrkeshögskolan']
     )
+
+    merged = pd.merge(
+        data_stud[['år', 'Studerande och examinerade inom yrkeshögskolan']],
+        data_exam[['år', 'Studerande och examinerade inom yrkeshögskolan']],
+        on='år',
+        suffixes=('_stud', '_exam')
+    )
+
+    merged['examensgrad'] = (merged['Studerande och examinerade inom yrkeshögskolan_exam'] /
+                              merged['Studerande och examinerade inom yrkeshögskolan_stud'] * 100).round(1)
 
     fig = go.Figure()
 
@@ -509,6 +524,7 @@ def create_comparison_chart(omrade):
         mode='lines+markers',
         name='Aktiva studenter',
         line=dict(width=3, color='#4361ee'),
+        yaxis='y',
         hovertemplate='<b>Aktiva studenter</b><br>År: %{x}<br>Antal: %{y}<extra></extra>'
     ))
 
@@ -517,14 +533,32 @@ def create_comparison_chart(omrade):
         y=data_exam['Studerande och examinerade inom yrkeshögskolan'],
         mode='lines+markers',
         name='Examinerade',
-        line=dict(width=3, color='#28a745'),
+        line=dict(width=3, color='#10b981'),
+        yaxis='y',
         hovertemplate='<b>Examinerade</b><br>År: %{x}<br>Antal: %{y}<extra></extra>'
     ))
 
+    fig.add_trace(go.Scatter(
+        x=merged['år'],
+        y=merged['examensgrad'],
+        mode='lines+markers',
+        name='Examensgrad (%)',
+        line=dict(width=3, color='#f59e0b', dash='dash'),
+        marker=dict(size=8),
+        yaxis='y2',
+        hovertemplate='<b>Examensgrad</b><br>År: %{x}<br>%{y}%<extra></extra>'
+    ))
+
     fig.update_layout(
-        title=f'Aktiva studenter vs Examinerade inom {omrade} (2005-2024)',
+        title=f'Aktiva studenter, Examinerade och Examensgrad inom {omrade} (2007-2024)',
         xaxis_title='År',
-        yaxis_title='Antal',
+        yaxis_title='Antal studenter',
+        yaxis2=dict(
+            title='Examensgrad (%)',
+            overlaying='y',
+            side='right',
+            range=[0, 100]
+        ),
         height=500,
         hovermode='x unified',
         xaxis=dict(tickmode='linear', dtick=2),

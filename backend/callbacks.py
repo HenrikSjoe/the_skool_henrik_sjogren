@@ -1,8 +1,8 @@
 import pandas as pd
 import plotly.graph_objects as go
-from calculations import calculate_kpis, filter_data, get_examensgrad_selected
-from charts import *
-from map_page import create_map
+from backend.calculations import calculate_kpis, filter_data, get_examensgrad_selected
+from frontend.charts import *
+from frontend.map_page import create_map
 
 def update_dashboard(state):
     filtered_df = filter_data(state.df, state.selected_year, state.selected_type, state.selected_anordnare)
@@ -92,9 +92,9 @@ def update_anordnare_insights(state):
     if anordnare_name in ranking_df['Anordnare'].values:
         position = ranking_df[ranking_df['Anordnare'] == anordnare_name].index[0] + 1
         total_competitors = len(ranking_df)
-        state.ranking_text = f"Du rankas #{position} av {total_competitors} anordnare (med minst 5 ansökningar)"
+        state.ranking_text = f"{anordnare_name} rankas #{position} av {total_competitors} anordnare (med minst 5 ansökningar)"
     else:
-        state.ranking_text = "För få ansökningar för att rankas (minst 5 krävs)"
+        state.ranking_text = f"{anordnare_name} har för få ansökningar för att rankas (minst 5 krävs)"
 
     state.godkannande_comparison_chart = create_godkannande_comparison_chart(filtered_data, anordnare_name)
     state.ranking_chart = create_ranking_chart(filtered_data, anordnare_name)

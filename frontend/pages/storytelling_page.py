@@ -27,7 +27,3 @@ with tgb.Page() as storytelling_page:
             tgb.image("outputs/storytelling_4_graduation_rate.png", width="100%")
 
     tgb.html("br")
-
-    # Footer note
-    tgb.text("*Visualiseringarna uppdateras genom att köra: `python storytelling.py`*",
-             mode="md", class_name="text-muted")

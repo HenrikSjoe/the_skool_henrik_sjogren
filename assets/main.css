@@ -75,9 +75,32 @@ h3 {
 
 /* Navbar styling */
 .taipy-navbar {
-    background-color: var(--primary-color);
-    padding: 1rem;
+    background-color: #ffffff;
+    padding: 0;
     margin-bottom: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.taipy-navbar a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 1rem 1.5rem;
+    display: inline-block;
+    font-weight: 500;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+}
+
+.taipy-navbar a:hover {
+    color: var(--primary-color);
+    background-color: #f8fafc;
+}
+
+.taipy-navbar a.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    font-weight: 600;
 }
 
 /* Tabell styling */
@@ -110,4 +133,28 @@ hr {
 
 .margin-top {
     margin-top: 1.5rem;
+}
+
+/* Text utilities */
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.text-primary {
+    color: var(--primary-color);
+}
+
+/* Card styling */
+.card {
+    background-color: var(--card-background);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
 }

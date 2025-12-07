@@ -56,21 +56,24 @@ def create_pie_chart(data):
         fig.update_layout(height=500)
         return fig
 
-    fig = px.pie(
-        beslut_counts,
-        values='Antal',
-        names='Beslut',
-        title="Fördelning: Beviljad vs Avslag",
-        color_discrete_sequence=['#10b981', '#ef4444'],
-        hole=0.3
-    )
+    colors = []
+    for beslut in beslut_counts['Beslut']:
+        if beslut == 'Beviljad':
+            colors.append('#10b981')
+        else:
+            colors.append('#ef4444')
 
-    fig.update_traces(
+    fig = go.Figure(data=[go.Pie(
+        labels=beslut_counts['Beslut'],
+        values=beslut_counts['Antal'],
+        hole=0.3,
+        marker=dict(colors=colors),
         textposition='inside',
         textinfo='percent+label'
-    )
+    )])
 
     fig.update_layout(
+        title="Fördelning: Beviljad vs Avslag",
         height=500,
         showlegend=True,
         margin=dict(l=20, r=20, t=60, b=20)

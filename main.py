@@ -1,16 +1,16 @@
 import pandas as pd
 import plotly.graph_objects as go
 from taipy.gui import Gui
-from data_loader import load_all_data, load_studerande_data
-from calculations import *
-from charts import *
-from callbacks import *
-from map_page import create_map
-from oversikt_page import oversikt_page
-from karta_page_file import karta_page
-from insikter_page import insikter_page
-from storytelling_page import storytelling_page
-from studerande_page import studerande_page
+from backend.data_loader import load_all_data, load_studerande_data
+from backend.calculations import *
+from backend.callbacks import *
+from frontend.charts import *
+from frontend.map_page import create_map
+from frontend.pages.oversikt_page import oversikt_page
+from frontend.pages.karta_page_file import karta_page
+from frontend.pages.insikter_page import insikter_page
+from frontend.pages.storytelling_page import storytelling_page
+from frontend.pages.studerande_page import studerande_page
 
 df = load_all_data()
 df_stud_filtered, omrade_list = load_studerande_data()

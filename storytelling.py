@@ -20,8 +20,8 @@ def load_all_data():
     """Ladda kurser och program från alla tillgängliga år"""
     all_dfs = []
 
-    # KURSER 2023 och 2024
-    for year in [2023, 2024]:
+    # KURSER 2022, 2023 och 2024
+    for year in [2022, 2023, 2024]:
         try:
             df = pd.read_excel(
                 f"data/raw/resultat-{year}-for-kurser-inom-yh.xlsx",
@@ -38,8 +38,8 @@ def load_all_data():
         try:
             if year == 2022:
                 df = pd.read_excel(
-                    f"data/raw/resultat-ansokningsomgang-{year}.xlsx",
-                    sheet_name="Tabell 3"
+                    f"data/raw/resultat-ansokningsomgang-{year}-ny.xlsx",
+                    sheet_name="Tabell 4"
                 )
             else:
                 df = pd.read_excel(
@@ -58,7 +58,7 @@ def load_all_data():
             print(f"⚠️ Kunde inte ladda Program {year}: {e}")
 
     combined = pd.concat(all_dfs, ignore_index=True)
-    print(f"✅ Laddade {len(combined)} ansökningar totalt")
+    print(f"Laddade {len(combined)} ansökningar totalt")
     return combined
 
 
@@ -135,7 +135,7 @@ def create_storytelling_approval_by_area(df, save_path="outputs/storytelling_1_a
     # Spara figur
     Path(save_path).parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    print(f"✅ Sparad: {save_path}")
+    print(f"Sparad: {save_path}")
     plt.close()
 
     return fig
@@ -203,21 +203,24 @@ def create_storytelling_datait_trend(df, save_path="outputs/storytelling_2_datai
     # Spara figur
     Path(save_path).parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    print(f"✅ Sparad: {save_path}")
+    print(f"Sparad: {save_path}")
     plt.close()
 
     return fig
 
 
-# ===== STORYTELLING 3: GODKÄNNANDEGRAD PER LÄN =====
+# ===== STORYTELLING 3: GODKÄNNANDEGRAD PER LÄN FÖR DATA/IT =====
 def create_storytelling_geographic_opportunity(df, save_path="outputs/storytelling_3_geographic_opportunity.png"):
     """
-    STORYTELLING 3: Var är det lättast att få beviljat?
-    Visa godkännandegrad per län (Beviljade/Totalt ansökningar)
+    STORYTELLING 3: Var bör The Skool fokusera?
+    Visa godkännandegrad per län för Data/IT-ansökningar
     """
 
+    # Filtrera på Data/IT endast
+    df_datait = df[df['Utbildningsområde'] == 'Data/IT'].copy()
+
     # Filtrera bort 'Flera kommuner'
-    df_clean = df[~df['Län'].str.contains('Flera|Lista', na=False, case=False)]
+    df_clean = df_datait[~df_datait['Län'].str.contains('Flera|Lista', na=False, case=False)]
 
     # Beräkna godkännandegrad per län
     lan_stats = df_clean.groupby('Län').apply(
@@ -229,8 +232,8 @@ def create_storytelling_geographic_opportunity(df, save_path="outputs/storytelli
         include_groups=False
     )
 
-    # Filtrera på minst 30 ansökningar för statistisk relevans
-    lan_stats = lan_stats[lan_stats['Totalt'] >= 30]
+    # Filtrera på minst 10 ansökningar för statistisk relevans (lägre tröskelvärde för Data/IT)
+    lan_stats = lan_stats[lan_stats['Totalt'] >= 10]
     lan_stats_sorted = lan_stats.sort_values('Godkännandegrad', ascending=True)
 
     # Ta bottom 5 (svårast) och top 5 (lättast)
@@ -257,30 +260,32 @@ def create_storytelling_geographic_opportunity(df, save_path="outputs/storytelli
 
     # Titlar och labels
     ax.set_xlabel('Godkännandegrad (%)', fontsize=12, fontweight='bold')
-    ax.set_title('Var är det lättast att få beviljat?\nGodkännandegrad per län 2022-2024',
+    ax.set_title('Var i Sverige bör The Skool fokusera?\nData/IT godkännandegrad per län 2022-2024',
                  fontsize=16, fontweight='bold', pad=20)
     ax.set_xlim(0, 65)
 
-    # ANNOTATION 1 - pekar på Södermanland (lättast)
+    # ANNOTATION 1 - pekar på bästa länet (peka utifrån mot slutet av stapeln)
     best_lan_idx = list(combined.index).index(top_5.index[-1])
     best_lan = top_5.index[-1]
     best_value = top_5['Godkännandegrad'].values[-1]
+    best_count = top_5['Totalt'].values[-1]
 
-    ax.annotate(f"{best_lan}: {best_value:.1f}% godkänt\nLättast att få beviljat!",
-                xy=(best_value - 1, best_lan_idx - 0.4),  # Pilspets PERFEKT placerad
-                xytext=(48, 6),  # Text högre upp i det vita området
+    ax.annotate(f"{best_lan}: {best_value:.1f}% godkänt\nBästa chansen! ({int(best_count)} ansökningar)",
+                xy=(best_value, best_lan_idx - 0.2),
+                xytext=(48, 7),
                 fontsize=10,
                 bbox=dict(boxstyle='round,pad=0.5', facecolor='#e6ffe6', edgecolor='#28a745', linewidth=2),
                 arrowprops=dict(arrowstyle='->', color='#28a745', lw=2.5, connectionstyle='arc3,rad=0.15'))
 
-    # ANNOTATION 2 - pekar på Halland (svårast)
+    # ANNOTATION 2 - pekar på svåraste länet (Västerbotten med 0.0%)
     worst_lan_idx = list(combined.index).index(bottom_5.index[0])
     worst_lan = bottom_5.index[0]
     worst_value = bottom_5['Godkännandegrad'].values[0]
+    worst_count = bottom_5['Totalt'].values[0]
 
-    ax.annotate(f"{worst_lan}: {worst_value:.1f}% godkänt\nSvårast län",
-                xy=(worst_value, worst_lan_idx - 0.3),  # Pilspets lite längre NER från 22.0%
-                xytext=(worst_value + 15, worst_lan_idx + 0.6),  # Text NER (inte genom 22.0%)
+    ax.annotate(f"{worst_lan}: {worst_value:.1f}% godkänt\nSvårast ({int(worst_count)} ansökningar)",
+                xy=(3, worst_lan_idx),
+                xytext=(15, worst_lan_idx + 0.8),
                 fontsize=10,
                 bbox=dict(boxstyle='round,pad=0.5', facecolor='#ffe6e6', edgecolor='#dc3545', linewidth=2),
                 arrowprops=dict(arrowstyle='->', color='#dc3545', lw=2.5, connectionstyle='arc3,rad=-0.2'))
@@ -294,7 +299,7 @@ def create_storytelling_geographic_opportunity(df, save_path="outputs/storytelli
     # Spara figur
     Path(save_path).parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    print(f"✅ Sparad: {save_path}")
+    print(f"Sparad: {save_path}")
     plt.close()
 
     return fig
@@ -378,16 +383,25 @@ def create_storytelling_graduation_rate(save_path="outputs/storytelling_4_gradua
     # Beräkna medelvärde för alla områden
     medel_examensgrad = df_exam['Examensgrad'].mean()
 
-    # Ta bottom 5 och top 5
-    bottom_5 = df_exam_sorted.head(5)
-    top_5 = df_exam_sorted.tail(5)
-    combined = pd.concat([bottom_5, top_5])
+    # Ta bottom 4 och top 4 för att ge plats åt Data/IT
+    bottom_4 = df_exam_sorted.head(4)
+    top_4 = df_exam_sorted.tail(4)
+
+    # Hitta Data/IT och lägg till det
+    datait_row = df_exam[df_exam['Utbildningsområde'] == 'Data/It']
+
+    # Kombinera: bottom 4, Data/IT, top 4
+    if not datait_row.empty:
+        combined = pd.concat([bottom_4, datait_row, top_4])
+    else:
+        # Fallback om Data/IT inte finns
+        combined = pd.concat([bottom_4, df_exam_sorted.iloc[[4]], top_4])
 
     # Skapa figur
     fig, ax = plt.subplots(figsize=(14, 9))
 
-    # Färgkodning: Röd för bottom 5 (lägst), grön för top 5 (högst)
-    colors = ['#dc3545'] * 5 + ['#28a745'] * 5
+    # Färgkodning: Röd för bottom 4, gul för Data/IT, grön för top 4
+    colors = ['#dc3545'] * 4 + ['#ffc107'] + ['#28a745'] * 4
 
     bars = ax.barh(range(len(combined)), combined['Examensgrad'].values, color=colors)
 
@@ -402,7 +416,7 @@ def create_storytelling_graduation_rate(save_path="outputs/storytelling_4_gradua
 
     # Titlar och labels
     ax.set_xlabel('Examensgrad (%)', fontsize=12, fontweight='bold')
-    ax.set_title('Vilka utbildningsområden har högst examensgrad?\nTop 5 och Bottom 5 utbildningsområden efter examensgrad 2024',
+    ax.set_title('Hur ligger Data/IT till i examensgrad?\nJämförelse med top 4 och bottom 4 utbildningsområden 2024',
                  fontsize=16, fontweight='bold', pad=20)
     ax.set_xlim(0, 50)
 
@@ -412,17 +426,22 @@ def create_storytelling_graduation_rate(save_path="outputs/storytelling_4_gradua
     # Legend för medelvärdeslinjen
     ax.legend(loc='lower right', fontsize=11)
 
-    # ANNOTATION - Hitta Data/IT position
-    if 'Data/It' in combined['Utbildningsområde'].values:
-        datait_idx = list(combined['Utbildningsområde'].values).index('Data/It')
-        datait_value = combined[combined['Utbildningsområde'] == 'Data/It']['Examensgrad'].values[0]
+    # ANNOTATION - Data/IT (alltid på position 4)
+    datait_idx = 4
+    datait_value = combined.iloc[4]['Examensgrad']
 
-        ax.annotate(f"Data/IT: {datait_value:.1f}%\n(Medel: {medel_examensgrad:.1f}%)",
-                    xy=(datait_value, datait_idx),
-                    xytext=(datait_value + 10, datait_idx - 1.5),
-                    fontsize=11,
-                    bbox=dict(boxstyle='round,pad=0.6', facecolor='#fff3cd', edgecolor='#ffc107', linewidth=2),
-                    arrowprops=dict(arrowstyle='->', color='#ffc107', lw=2.5, connectionstyle='arc3,rad=-0.3'))
+    # Jämför med medelvärde
+    if datait_value > medel_examensgrad:
+        comparison = f"över medel ({medel_examensgrad:.1f}%)"
+    else:
+        comparison = f"under medel ({medel_examensgrad:.1f}%)"
+
+    ax.annotate(f"Data/IT: {datait_value:.1f}%\n{comparison}",
+                xy=(datait_value, datait_idx),
+                xytext=(datait_value + 10, datait_idx + 1),
+                fontsize=11,
+                bbox=dict(boxstyle='round,pad=0.6', facecolor='#fff3cd', edgecolor='#ffc107', linewidth=2),
+                arrowprops=dict(arrowstyle='->', color='#ffc107', lw=2.5, connectionstyle='arc3,rad=0.2'))
 
     # Grid
     ax.grid(axis='x', alpha=0.3, linestyle='--')
@@ -432,13 +451,14 @@ def create_storytelling_graduation_rate(save_path="outputs/storytelling_4_gradua
     plt.subplots_adjust(bottom=0.12)
 
     # Lägg till textförklaring för färger längst ner
-    fig.text(0.12, 0.03, '🔴 Bottom 5: Lägst examensgrad', fontsize=10, color='#dc3545', fontweight='bold')
-    fig.text(0.50, 0.03, '🟢 Top 5: Högst examensgrad', fontsize=10, color='#28a745', fontweight='bold')
+    fig.text(0.12, 0.03, 'Bottom 4: Lägst examensgrad', fontsize=10, color='#dc3545', fontweight='bold')
+    fig.text(0.40, 0.03, 'Data/IT: The Skools fokus', fontsize=10, color='#ffc107', fontweight='bold')
+    fig.text(0.68, 0.03, 'Top 4: Högst examensgrad', fontsize=10, color='#28a745', fontweight='bold')
 
     # Spara figur
     Path(save_path).parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    print(f"✅ Sparad: {save_path}")
+    print(f"Sparad: {save_path}")
     plt.close()
 
     return fig
@@ -447,48 +467,48 @@ def create_storytelling_graduation_rate(save_path="outputs/storytelling_4_gradua
 # ===== MAIN EXECUTION =====
 if __name__ == "__main__":
     print("\n" + "="*60)
-    print("📊 YH-KOLLEN STORYTELLING FÖR THE SKOOL")
+    print("YH-KOLLEN STORYTELLING FÖR THE SKOOL")
     print("="*60 + "\n")
 
     # Ladda data
-    print("📂 Laddar data...")
+    print("Laddar data...")
     df = load_all_data()
 
-    print(f"\n✅ Data laddad: {len(df)} ansökningar")
-    print(f"   • Beviljade: {len(df[df['Beslut'] == 'Beviljad'])}")
-    print(f"   • Avslag: {len(df[df['Beslut'] == 'Avslag'])}")
-    print(f"   • Godkännandegrad: {len(df[df['Beslut'] == 'Beviljad']) / len(df) * 100:.1f}%")
+    print(f"\nData laddad: {len(df)} ansökningar")
+    print(f"   - Beviljade: {len(df[df['Beslut'] == 'Beviljad'])}")
+    print(f"   - Avslag: {len(df[df['Beslut'] == 'Avslag'])}")
+    print(f"   - Godkännandegrad: {len(df[df['Beslut'] == 'Beviljad']) / len(df) * 100:.1f}%")
 
     # Data/IT stats
     datait = df[df['Utbildningsområde'] == 'Data/IT']
-    print(f"\n📊 Data/IT specifikt:")
-    print(f"   • Totalt: {len(datait)} ansökningar")
-    print(f"   • Beviljade: {(datait['Beslut'] == 'Beviljad').sum()}")
-    print(f"   • Godkännandegrad: {(datait['Beslut'] == 'Beviljad').sum() / len(datait) * 100:.1f}%")
+    print(f"\nData/IT specifikt:")
+    print(f"   - Totalt: {len(datait)} ansökningar")
+    print(f"   - Beviljade: {(datait['Beslut'] == 'Beviljad').sum()}")
+    print(f"   - Godkännandegrad: {(datait['Beslut'] == 'Beviljad').sum() / len(datait) * 100:.1f}%")
 
     # Skapa visualiseringar
-    print("\n📊 Skapar storytelling-visualiseringar...\n")
+    print("\nSkapar storytelling-visualiseringar...\n")
 
-    print("1️⃣ Godkännandegrad per område (Data/IT challenge)...")
+    print("1. Godkännandegrad per område (Data/IT challenge)...")
     fig1 = create_storytelling_approval_by_area(df)
 
-    print("2️⃣ Data/IT trend över tid (Blir det bättre?)...")
+    print("2. Data/IT trend över tid (Blir det bättre?)...")
     fig2 = create_storytelling_datait_trend(df)
 
-    print("3️⃣ Geografiska möjligheter (Var finns chansen?)...")
+    print("3. Geografiska möjligheter (Var finns chansen?)...")
     fig3 = create_storytelling_geographic_opportunity(df)
 
-    print("4️⃣ Examensgrad per område (Vem slutför?)...")
+    print("4. Examensgrad per område (Vem slutför?)...")
     fig4 = create_storytelling_graduation_rate()
 
     print("\n" + "="*60)
-    print("✅ KLART! Storytelling för The Skool klar!")
+    print("KLART! Storytelling för The Skool klar!")
     print("="*60)
-    print("\n📁 Filer:")
-    print("   • storytelling_1_approval_by_area.png")
-    print("   • storytelling_2_datait_trend.png")
-    print("   • storytelling_3_geographic_opportunity.png")
-    print("   • storytelling_4_graduation_rate.png")
-    print("\n💡 Starta appen: python main.py")
+    print("\nFiler:")
+    print("   - storytelling_1_approval_by_area.png")
+    print("   - storytelling_2_datait_trend.png")
+    print("   - storytelling_3_geographic_opportunity.png")
+    print("   - storytelling_4_graduation_rate.png")
+    print("\nStarta appen: python main.py")
     print("   Navigera till Storytelling-sidan!")
     print("\n")

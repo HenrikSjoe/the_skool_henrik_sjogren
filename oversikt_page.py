@@ -1,15 +1,8 @@
-"""
-YH-kollen - Översiktssida
-
-Denna sida visar KPI-kort, filter och flera visualiseringar för att
-analysera YH-ansökningar.
-"""
-
 import taipy.gui.builder as tgb
 with tgb.Page() as oversikt_page:
     tgb.navbar()
 
-    tgb.text("# 🎓 YH-kollen Dashboard", mode="md")
+    tgb.text("# YH-kollen Dashboard", mode="md")
 
     tgb.html("hr")
 

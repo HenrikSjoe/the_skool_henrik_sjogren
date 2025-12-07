@@ -1,23 +1,14 @@
-"""
-YH-kollen - Kartsida
-Geografisk karta över beviljade ansökningar per län
-"""
-
 import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
 import json
 from difflib import get_close_matches
 
-# ===== LADDA GEOJSON =====
 def load_geojson():
-    """Ladda GeoJSON för svenska län"""
     with open("assets/swedish_regions.geojson", "r", encoding="utf-8") as file:
         return json.load(file)
 
-# ===== SKAPA KARTA =====
 def create_map(data):
-    """Skapa choropleth map över beviljade ansökningar per län"""
     geojson = load_geojson()
 
     filtered = data[data['Län'].notna()].copy()

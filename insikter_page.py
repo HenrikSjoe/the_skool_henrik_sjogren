@@ -1,15 +1,9 @@
-"""
-YH-kollen - Insikter för Anordnare
-
-Denna sida visar personaliserade insikter och jämförelser för utbildningsanordnare.
-"""
-
 import taipy.gui.builder as tgb
 
 with tgb.Page() as insikter_page:
     tgb.navbar()
 
-    tgb.text("# 🔍 Insikter för Anordnare", mode="md")
+    tgb.text("# Insikter för Anordnare", mode="md")
 
     tgb.html("hr")
 

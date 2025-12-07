@@ -1,16 +1,10 @@
-"""
-Studerande Page - Antal studerande över tid per utbildningsområde
-
-Visualisera antal studerande över tid.
-"""
-
 import taipy.gui.builder as tgb
 
 with tgb.Page() as studerande_page:
     tgb.navbar()
 
     # Header
-    tgb.text("# 📈 Antal Studerande över Tid", mode="md", class_name="text-center")
+    tgb.text("# Antal Studerande över Tid", mode="md", class_name="text-center")
     tgb.text("**Totalt antal aktiva studenter per utbildningsområde (inkl. både nya och fortsättande) 2005-2024**", mode="md", class_name="text-center")
     tgb.html("br")
 
@@ -21,8 +15,7 @@ with tgb.Page() as studerande_page:
             value="{selected_omrade}",
             lov="{omrade_list}",
             dropdown=True,
-            label="Utbildningsområde",
-            class_name="fullwidth",
+            filter=True,
             on_change="update_studerande"
         )
 
@@ -30,7 +23,7 @@ with tgb.Page() as studerande_page:
 
     # KPI: Examensgrad statistik
     with tgb.part(class_name="card"):
-        tgb.text("### 🎓 Examensgrad-statistik (2024)", mode="md")
+        tgb.text("### Examensgrad-statistik (2024)", mode="md")
         tgb.text("*Examensgrad = Antal examinerade / Antal aktiva studenter*", mode="md", class_name="text-muted")
         tgb.html("br")
 

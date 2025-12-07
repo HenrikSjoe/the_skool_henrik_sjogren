@@ -1,10 +1,3 @@
-"""
-YH-kollen - Kartsida
-
-Denna sida visar en geografisk visualisering av beviljade YH-ansökningar
-per län med interaktiva filter.
-"""
-
 import taipy.gui.builder as tgb
 
 with tgb.Page() as karta_page:

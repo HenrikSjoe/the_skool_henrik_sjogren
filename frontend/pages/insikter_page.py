@@ -4,8 +4,8 @@ with tgb.Page() as insikter_page:
     tgb.navbar()
 
     # Header
-    tgb.text("# Insikter för Anordnare", mode="md", class_name="text-center")
-    tgb.text("**Jämför din prestation med genomsnittet**", mode="md", class_name="text-center")
+    tgb.text("# Anordnare", mode="md", class_name="text-center")
+    tgb.text("**Jämför anordnare och analysera prestanda**", mode="md", class_name="text-center")
     tgb.html("br")
 
     # FILTER SEKTION

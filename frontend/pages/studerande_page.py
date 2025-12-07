@@ -4,7 +4,7 @@ with tgb.Page() as studerande_page:
     tgb.navbar()
 
     # Header
-    tgb.text("# Antal Studerande över Tid", mode="md", class_name="text-center")
+    tgb.text("# Studenttrender", mode="md", class_name="text-center")
     tgb.text("**Totalt antal aktiva studenter per utbildningsområde (inkl. både nya och fortsättande) 2005-2024**", mode="md", class_name="text-center")
     tgb.html("br")
 

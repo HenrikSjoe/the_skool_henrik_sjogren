@@ -68,11 +68,11 @@ examensgrad_top5 = get_examensgrad_top5()
 examensgrad_selected = get_examensgrad_selected(selected_omrade)
 
 pages = {
-    "home": oversikt_page,
+    "Översikt": oversikt_page,
+    "Studenttrender": studerande_page,
     "Karta": karta_page,
-    "Insikter": insikter_page,
-    "Storytelling": storytelling_page,
-    "Studerande": studerande_page
+    "Anordnare": insikter_page,
+    "Storytelling": storytelling_page
 }
 
 if __name__ == "__main__":

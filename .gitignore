@@ -143,6 +143,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.venv311
+
 
 # Spyder project settings
 .spyderproject
@@ -158,6 +160,7 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+.claude/
 
 # Pyre type checker
 .pyre/
@@ -209,6 +212,10 @@ __marimo__/
 .DS_Store
 
 
-# Project-specific ignores
-data/raw/
 .taipy/
+
+PRESENTATION_GUIDE.md
+PROJECT_STATUS.md
+
+
+

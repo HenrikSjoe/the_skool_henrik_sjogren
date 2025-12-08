@@ -26,6 +26,19 @@ Open your browser at `http://localhost:5005`
 - **Organizers**: Compare education organizers and analyze performance
 - **Storytelling**: Visualizations of key insights
 
+## Key Performance Indicators (KPIs)
+
+The dashboard tracks the following KPIs:
+
+1. **Total Applications**: Total number of applications submitted (courses and programs)
+2. **Approval Rate**: Percentage of approved applications vs total applications
+3. **Total Approved Positions**: Number of student positions in approved applications
+4. **Graduation Rate**: Percentage of students who complete their education (per education area)
+5. **Organizer Ranking**: Performance ranking of education organizers based on approval rate
+6. **Geographic Distribution**: Number of approved applications per county
+7. **Trend Analysis**: Year-over-year changes in applications and approvals
+8. **Area-specific Approval Rates**: Success rates for different education areas
+
 ## Data structure
 
 ```
@@ -38,5 +51,6 @@ data/raw/
 ## Tech stack
 
 - Taipy GUI for frontend
-- Plotly for visualizations
+- Plotly for interactive visualizations
+- Matplotlib for storytelling charts
 - Pandas for data handling

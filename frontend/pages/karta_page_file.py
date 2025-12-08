@@ -6,6 +6,7 @@ with tgb.Page() as karta_page:
     # Header
     tgb.text("# Geografisk fördelning", mode="md", class_name="text-center")
     tgb.text("**Översikt av beviljade ansökningar per län**", mode="md", class_name="text-center")
+    tgb.text("*Kartan visar var beviljade YH-utbildningar geografiskt är placerade i Sverige*", mode="md", class_name="text-center text-muted")
     tgb.html("br")
 
     # FILTER SEKTION

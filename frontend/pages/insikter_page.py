@@ -6,11 +6,13 @@ with tgb.Page() as insikter_page:
     # Header
     tgb.text("# Anordnare", mode="md", class_name="text-center")
     tgb.text("**Jämför anordnare och analysera prestanda**", mode="md", class_name="text-center")
+    tgb.text("*Godkännandegrad = Andel beviljade ansökningar av totala ansökningar*", mode="md", class_name="text-center text-muted")
     tgb.html("br")
 
     # FILTER SEKTION
     with tgb.part(class_name="card"):
         tgb.text("## Välj anordnare att analysera", mode="md")
+        tgb.text("*Välj en anordnare för att se detaljerad statistik och jämförelse*", mode="md", class_name="text-muted")
 
         with tgb.layout(columns="1 1"):
             with tgb.part():
@@ -52,10 +54,12 @@ with tgb.Page() as insikter_page:
     with tgb.layout(columns="1 1"):
         with tgb.part(class_name="card"):
             tgb.text("### Godkännandegrad jämfört med genomsnittet", mode="md")
+            tgb.text("*Visar hur vald anordnare presterar relativt till genomsnittet*", mode="md", class_name="text-muted")
             tgb.chart(figure="{godkannande_comparison_chart}")
 
         with tgb.part(class_name="card"):
             tgb.text("### Position bland alla anordnare", mode="md")
+            tgb.text("*Ranking baserad på godkännandegrad (minst 5 ansökningar krävs)*", mode="md", class_name="text-muted")
             tgb.text("*{ranking_text}*", mode="md", class_name="text-muted")
             tgb.chart(figure="{ranking_chart}")
 

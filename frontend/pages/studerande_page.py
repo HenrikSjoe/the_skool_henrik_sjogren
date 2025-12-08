@@ -5,7 +5,7 @@ with tgb.Page() as studerande_page:
 
     # Header
     tgb.text("# Studenttrender", mode="md", class_name="text-center")
-    tgb.text("**Totalt antal aktiva studenter per utbildningsområde (inkl. både nya och fortsättande) 2005-2024**", mode="md", class_name="text-center")
+    tgb.text("**Alla inskrivna studenter per utbildningsområde 2005-2024**", mode="md", class_name="text-center")
     tgb.html("br")
 
     # Filter: Välj utbildningsområde
@@ -43,8 +43,8 @@ with tgb.Page() as studerande_page:
 
     # Visualisering: Line chart
     with tgb.part(class_name="card"):
-        tgb.text("### Trend: Totalt antal aktiva studenter", mode="md")
-        tgb.text("*Visar alla studenter som är aktiva i utbildning vid mättillfället (både nya och fortsättande)*", mode="md", class_name="text-muted")
+        tgb.text("### Trend: Totalt antal inskrivna studenter", mode="md")
+        tgb.text("*Visar alla studenter som är inskrivna i utbildning vid mättillfället*", mode="md", class_name="text-muted")
         tgb.chart(figure="{studerande_chart}")
 
     tgb.html("br")
@@ -59,17 +59,6 @@ with tgb.Page() as studerande_page:
 
     # Visualisering: Jämförelse
     with tgb.part(class_name="card"):
-        tgb.text("### Jämförelse: Aktiva studenter vs Examinerade", mode="md")
-        tgb.text("*Visar relationen mellan totalt antal aktiva studenter och antal som examineras per år*", mode="md", class_name="text-muted")
+        tgb.text("### Jämförelse: Inskrivna studenter vs Examinerade", mode="md")
+        tgb.text("*Visar relationen mellan totalt antal inskrivna studenter och antal som examineras per år. Den gula linjen visar examensgrad (andel som tar examen).*", mode="md", class_name="text-muted")
         tgb.chart(figure="{comparison_chart}")
-
-    tgb.html("br")
-
-    # Tabell med data
-    with tgb.part(class_name="card"):
-        tgb.text("### Detaljerad data", mode="md")
-        tgb.table(
-            data="{studerande_table}",
-            page_size=10,
-            page_size_options="10;20;50"
-        )

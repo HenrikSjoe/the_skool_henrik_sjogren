@@ -416,6 +416,13 @@ def create_studerande_chart(omrade, df_stud_filtered):
 
     data_omrade = df_stud_filtered[df_stud_filtered['utbildningens inriktning'] == omrade].copy()
     data_omrade['år'] = data_omrade['år'].astype(int)
+
+    # Remove ".." values and convert to numeric
+    data_omrade = data_omrade[data_omrade['Studerande och examinerade inom yrkeshögskolan'] != '..']
+    data_omrade['Studerande och examinerade inom yrkeshögskolan'] = pd.to_numeric(
+        data_omrade['Studerande och examinerade inom yrkeshögskolan']
+    )
+
     data_omrade = data_omrade.sort_values('år')
 
     fig = px.line(
@@ -578,6 +585,12 @@ def create_studerande_table(omrade, df_stud_filtered):
         return pd.DataFrame({'Meddelande': ['Ingen data tillgänglig']})
 
     data_omrade = df_stud_filtered[df_stud_filtered['utbildningens inriktning'] == omrade].copy()
+
+    # Remove ".." values and convert to numeric
+    data_omrade = data_omrade[data_omrade['Studerande och examinerade inom yrkeshögskolan'] != '..']
+    data_omrade['Studerande och examinerade inom yrkeshögskolan'] = pd.to_numeric(
+        data_omrade['Studerande och examinerade inom yrkeshögskolan']
+    )
 
     table_data = data_omrade[['år', 'Studerande och examinerade inom yrkeshögskolan']].copy()
     table_data.columns = ['År', 'Antal aktiva studenter']

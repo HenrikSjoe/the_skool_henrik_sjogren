@@ -330,12 +330,12 @@ def create_styrkor_svagheter_charts(data, anordnare_name):
             text=[f"{anordnare_rate}%"],
             textposition='auto',
             marker=dict(color=color),
-            name='Din prestanda',
+            name=f'{anordnare_name}',
             hovertemplate=f'<b>{anordnare_name}</b><br>Godkänd: {anordnare_rate}%<br>Ansökningar: {row["Ansökningar"]}<br>Beviljade: {row["Beviljade"]}<extra></extra>'
         ))
 
         fig.update_layout(
-            title=f"Din prestanda vs genomsnitt inom {omrade_namn}",
+            title=f"{anordnare_name} vs genomsnitt inom {omrade_namn}",
             xaxis_title="Godkännandegrad (%)",
             yaxis_title="",
             height=250,
@@ -386,7 +386,7 @@ def create_styrkor_svagheter_charts(data, anordnare_name):
             font_size = 12
 
         fig.update_layout(
-            title="Godkännandegrad per utbildningsområde",
+            title=f"{anordnare_name}s godkännandegrad per utbildningsområde",
             xaxis_title="Godkännandegrad (%)",
             yaxis_title="",
             height=height,

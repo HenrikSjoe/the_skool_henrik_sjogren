@@ -86,6 +86,11 @@ def create_stacked_bar_chart(data):
     top_areas = data.groupby('Utbildningsområde').size().sort_values(ascending=False).head(10).index
     grouped = grouped[grouped['Utbildningsområde'].isin(top_areas)]
 
+    # Beräkna totalt per område och procentsatser
+    totals = grouped.groupby('Utbildningsområde')['Antal'].sum().to_dict()
+    grouped['Totalt'] = grouped['Utbildningsområde'].map(totals)
+    grouped['Procent'] = (grouped['Antal'] / grouped['Totalt'] * 100).round(1)
+
     fig = px.bar(
         grouped,
         x='Utbildningsområde',
@@ -94,10 +99,11 @@ def create_stacked_bar_chart(data):
         title="Kurser vs Program per Utbildningsområde (Marknadsöversikt - Top 10)",
         labels={'Utbildningsområde': 'Utbildningsområde', 'Antal': 'Antal ansökningar'},
         color_discrete_map={'Kurs': '#8b5cf6', 'Program': '#06b6d4'},
-        barmode='stack'
+        barmode='stack',
+        custom_data=['Procent', 'Totalt']
     )
 
-    fig.update_traces(hovertemplate='<b>%{x}</b><br>%{fullData.name}: %{y}<extra></extra>')
+    fig.update_traces(hovertemplate='<b>%{x}</b><br>%{fullData.name}: %{y} st (%{customdata[0]}%)<br>Totalt: %{customdata[1]} ansökningar<extra></extra>')
 
     fig.update_layout(
         height=500,
@@ -113,6 +119,11 @@ def create_beslut_bar_chart(data):
     top_areas = data.groupby('Utbildningsområde').size().sort_values(ascending=False).head(10).index
     grouped = grouped[grouped['Utbildningsområde'].isin(top_areas)]
 
+    # Beräkna totalt per område och procentsatser
+    totals = grouped.groupby('Utbildningsområde')['Antal'].sum().to_dict()
+    grouped['Totalt'] = grouped['Utbildningsområde'].map(totals)
+    grouped['Procent'] = (grouped['Antal'] / grouped['Totalt'] * 100).round(1)
+
     fig = px.bar(
         grouped,
         x='Utbildningsområde',
@@ -121,10 +132,11 @@ def create_beslut_bar_chart(data):
         title="Beviljad vs Avslag per Utbildningsområde (Marknadsöversikt - Top 10)",
         labels={'Utbildningsområde': 'Utbildningsområde', 'Antal': 'Antal ansökningar'},
         color_discrete_map={'Beviljad': '#10b981', 'Avslag': '#ef4444'},
-        barmode='stack'
+        barmode='stack',
+        custom_data=['Procent', 'Totalt']
     )
 
-    fig.update_traces(hovertemplate='<b>%{x}</b><br>%{fullData.name}: %{y}<extra></extra>')
+    fig.update_traces(hovertemplate='<b>%{x}</b><br>%{fullData.name}: %{y} st (%{customdata[0]}%)<br>Totalt: %{customdata[1]} ansökningar<extra></extra>')
 
     fig.update_layout(
         height=500,

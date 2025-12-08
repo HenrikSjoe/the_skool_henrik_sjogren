@@ -117,7 +117,7 @@ def create_storytelling_approval_by_area(df, save_path="outputs/storytelling_1_a
     # Räkna totalt antal ansökningar för Data/IT
     datait_total = df[df['Utbildningsområde'] == 'Data/IT'].shape[0]
 
-    annotation_text = f"Data/IT: Bara {datait_value:.0f}% godkänt\n#1 mest sökta: {datait_total} ansökningar!"
+    annotation_text = f"Data/IT: Bara {datait_value:.1f}% godkänt\n#1 mest sökta: {datait_total} ansökningar!"
 
     ax.annotate(annotation_text,
                 xy=(datait_value, datait_idx),
@@ -192,7 +192,7 @@ def create_storytelling_datait_trend(df, save_path="outputs/storytelling_2_datai
     annotation_text = f"2023: Bästa chansen!\n{best_value:.1f}% godkänt"
 
     ax.annotate(annotation_text,
-                xy=(best_year, best_value),
+                xy=(best_year +0.01, best_value + 0.5),
                 xytext=(best_year + 0.3, best_value + 5),
                 fontsize=11,
                 bbox=dict(boxstyle='round,pad=0.6', facecolor='#e6ffe6', edgecolor='#28a745', linewidth=2),
@@ -284,7 +284,7 @@ def create_storytelling_geographic_opportunity(df, save_path="outputs/storytelli
     worst_count = bottom_5['Totalt'].values[0]
 
     ax.annotate(f"{worst_lan}: {worst_value:.1f}% godkänt\nSvårast ({int(worst_count)} ansökningar)",
-                xy=(3, worst_lan_idx),
+                xy=(7.8, worst_lan_idx - 0.2),
                 xytext=(15, worst_lan_idx + 0.8),
                 fontsize=10,
                 bbox=dict(boxstyle='round,pad=0.5', facecolor='#ffe6e6', edgecolor='#dc3545', linewidth=2),
@@ -437,8 +437,8 @@ def create_storytelling_graduation_rate(save_path="outputs/storytelling_4_gradua
         comparison = f"under medel ({medel_examensgrad:.1f}%)"
 
     ax.annotate(f"Data/IT: {datait_value:.1f}%\n{comparison}",
-                xy=(datait_value, datait_idx),
-                xytext=(datait_value + 10, datait_idx + 1),
+                xy=(datait_value, datait_idx + 0.2),
+                xytext=(datait_value + 15, datait_idx + 1),
                 fontsize=11,
                 bbox=dict(boxstyle='round,pad=0.6', facecolor='#fff3cd', edgecolor='#ffc107', linewidth=2),
                 arrowprops=dict(arrowstyle='->', color='#ffc107', lw=2.5, connectionstyle='arc3,rad=0.2'))

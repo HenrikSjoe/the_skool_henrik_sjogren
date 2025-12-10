@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from backend.calculations import calculate_kpis, filter_data, get_examensgrad_selected
 from frontend.charts import *
-from frontend.map_page import create_map
+from frontend.map_charts import create_map
 
 def update_dashboard(state):
     filtered_df = filter_data(state.df, state.selected_year, state.selected_type, state.selected_anordnare)

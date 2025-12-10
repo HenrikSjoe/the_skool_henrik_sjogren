@@ -14,7 +14,7 @@ pip install -r requirements.txt
 
 ```bash
 # Generate storytelling images (required first time)
-python storytelling.py
+python -m backend.storytelling_charts
 
 # Start the dashboard
 python main.py

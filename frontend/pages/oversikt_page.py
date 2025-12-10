@@ -72,7 +72,7 @@ with tgb.Page() as oversikt_page:
     with tgb.layout(columns="1 1"):
         with tgb.part(class_name="card"):
             tgb.text("### Kurser vs Program", mode="md")
-            tgb.text("*Jämförelse mellan kortare kurser och längre program över tid*", mode="md", class_name="text-muted")
+            tgb.text("*Jämförelse mellan kurser och program*", mode="md", class_name="text-muted")
             tgb.chart(figure="{stacked_bar_chart}")
 
         with tgb.part(class_name="card"):

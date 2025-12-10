@@ -5,10 +5,10 @@ from backend.data_loader import load_all_data, load_studerande_data
 from backend.calculations import *
 from backend.callbacks import *
 from frontend.charts import *
-from frontend.map_page import create_map
+from frontend.map_charts import create_map
 from frontend.pages.oversikt_page import oversikt_page
-from frontend.pages.karta_page_file import karta_page
-from frontend.pages.insikter_page import insikter_page
+from frontend.pages.karta_page import karta_page
+from frontend.pages.anordnare_page import anordnare_page
 from frontend.pages.storytelling_page import storytelling_page
 from frontend.pages.studerande_page import studerande_page
 
@@ -71,7 +71,7 @@ pages = {
     "Översikt": oversikt_page,
     "Studenttrender": studerande_page,
     "Karta": karta_page,
-    "Anordnare": insikter_page,
+    "Anordnare": anordnare_page,
     "Storytelling": storytelling_page
 }
 

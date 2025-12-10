@@ -1,6 +1,6 @@
 import taipy.gui.builder as tgb
 
-with tgb.Page() as insikter_page:
+with tgb.Page() as anordnare_page:
     tgb.navbar()
 
     # Header

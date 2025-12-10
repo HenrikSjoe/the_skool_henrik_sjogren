@@ -13,6 +13,10 @@ pip install -r requirements.txt
 ## Running the application
 
 ```bash
+# Generate storytelling images (required first time)
+python storytelling.py
+
+# Start the dashboard
 python main.py
 ```
 

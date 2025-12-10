@@ -43,6 +43,11 @@ The dashboard tracks the following KPIs:
 7. **Trend Analysis**: Year-over-year changes in applications and approvals
 8. **Area-specific Approval Rates**: Success rates for different education areas
 
+## Data sources
+
+- [Myndigheten för yrkeshögskolan (MYH)](https://www.myh.se) - Application results 2022-2024
+- [Statistiska centralbyrån (SCB)](https://www.scb.se) - Student statistics 2005-2024
+
 ## Data structure
 
 ```
@@ -54,7 +59,8 @@ data/raw/
 
 ## Tech stack
 
+- Python
 - Taipy GUI for frontend
 - Plotly for interactive visualizations
-- Matplotlib for storytelling charts
+- Matplotlib/Seaborn for storytelling charts
 - Pandas for data handling

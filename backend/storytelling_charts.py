@@ -260,7 +260,7 @@ def create_storytelling_geographic_opportunity(df, save_path="outputs/storytelli
 
     # Titlar och labels
     ax.set_xlabel('Godkännandegrad (%)', fontsize=12, fontweight='bold')
-    ax.set_title('Var i Sverige bör The Skool fokusera?\nData/IT godkännandegrad per län 2022-2024',
+    ax.set_title('Var i Sverige bör man fokusera för att maximera sina chanser inom Data/IT?\nData/IT godkännandegrad per län 2022-2024',
                  fontsize=16, fontweight='bold', pad=20)
     ax.set_xlim(0, 65)
 
